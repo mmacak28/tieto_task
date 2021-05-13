@@ -35,6 +35,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.palindromicity</groupId>
+            <artifactId>simple-syslog-5424</artifactId>
+            <version>0.0.16</version>
+        </dependency>
     </dependencies>
 
     <build>
