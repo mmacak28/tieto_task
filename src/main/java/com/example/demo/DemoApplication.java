@@ -7,12 +7,30 @@ import com.github.palindromicity.syslog.SyslogParserBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.Reader;
+import java.time.LocalTime;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //@SpringBootApplication
 public class DemoApplication{
+
+    public static boolean isPattern(String pattern_s,Map<String,Object> syslogMap){
+        Pattern pattern = Pattern.compile(pattern_s);
+        Matcher matcher = pattern.matcher(syslogMap.get("syslog.header.timestamp").toString());
+        return matcher.find();
+    }
+
+    //https://www.rgagnon.com/javadetails/java-0624.html
+    public static boolean isHourInInterval(String target, String start, String end) {
+        LocalTime t1 = LocalTime.parse( target );
+        LocalTime t2 = LocalTime.parse( start );
+        LocalTime t3 = LocalTime.parse( end );
+
+        return ((t1.compareTo(t2) >= 0)
+                && (t1.compareTo(t3) <= 0));
+    }
 
     public static void main(String[] args) {
         //SpringApplication.run(DemoApplication.class, args);
@@ -23,6 +41,37 @@ public class DemoApplication{
                 String line = (input.nextLine());
                 Map<String,Object> syslogMap = parser.parseLine(line);
                 System.out.println(syslogMap.get("syslog.header.timestamp"));
+                if (args[1].length() == 7){
+                    String pattern_s = args[1] + "-(0[1-9]|[1-2][0-9]|3[0-1])T(2[0-3]|[01][0-9]):([0-5][0-9]):[0-5][0-9].[0-5][0-5][0-9]Z";
+                    if (isPattern(pattern_s,syslogMap)){
+                        System.out.println(syslogMap.get("syslog.header.appName"));
+                    }
+                }
+                else if (args[1].length() == 10){
+                    String pattern_s = args[1] + "T(2[0-3]|[01][0-9]):([0-5][0-9]):[0-5][0-9].[0-5][0-5][0-9]Z";
+                    if (isPattern(pattern_s,syslogMap)){
+                        System.out.println(syslogMap.get("syslog.header.hostName"));
+                    }
+                }
+                else if (args[1].length() == 8){
+                    String pattern_s = "[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])T" +args[1] + ".[0-5][0-5][0-9]Z";
+                    if (isPattern(pattern_s,syslogMap)){
+                        System.out.println(syslogMap.get("syslog.message"));
+                    }
+                }
+                else if (args[1].length() == 17){
+                    String [] times = args[1].split("-");
+                    System.out.println(times[0]);
+                    System.out.println(times[1]);
+                    String [] timestampParts = syslogMap.get("syslog.header.timestamp").toString().split("T");
+
+                    String [] timestampTime = timestampParts[1].split("\\.");
+
+                    System.out.println(timestampTime[0]);
+                    if (isHourInInterval(timestampTime[0],times[0],times[1])){
+                        System.out.println(syslogMap.get("syslog.header.msgId"));
+                    }
+                }
             }
             input.close();
         }
