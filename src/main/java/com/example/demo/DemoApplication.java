@@ -6,6 +6,7 @@ import com.github.palindromicity.syslog.SyslogParserBuilder;
 import java.awt.*;
 import java.io.*;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -53,6 +54,22 @@ public class DemoApplication{
      * @throws IOException thrown in case of IO error
      */
     public static void writeToBuffer(BufferedWriter bw, Map<String,Object> syslogMap) throws IOException {
+        //iterates over structured data
+        ArrayList<String> keys = new ArrayList();
+        for (Map.Entry<String, Object> entry : syslogMap.entrySet()) {
+            if (entry.getKey().startsWith("syslog.structuredData.")) {
+                keys.add(entry.getKey());
+            }
+        }
+
+        //gets the values of keys of structured data
+        String values = "";
+        for (String key: keys)
+        {
+            values = values + syslogMap.get(key) + " ";
+        }
+        values = (values.trim().length() > 0) ? values : "null";
+
         bw.write("<tr><td>" + syslogMap.get("syslog.header.pri") + "</td>" +
                 "<td>" + syslogMap.get("syslog.header.version") + "</td>" +
                 "<td>" + syslogMap.get("syslog.header.timestamp") + "</td>" +
@@ -60,7 +77,7 @@ public class DemoApplication{
                 "<td>" + syslogMap.get("syslog.header.appName") + "</td>" +
                 "<td>" + syslogMap.get("syslog.header.procId") + "</td>" +
                 "<td>" + syslogMap.get("syslog.header.msgId") + "</td>" +
-                "<td>" + syslogMap.get("syslog.structuredData\\\\.(.*)\\\\.(.*)$") + "</td>" +
+                "<td>" + values + "</td>" +
                 "<td>" + syslogMap.get("syslog.message") + "</td>" +
                 "</tr>");
     }
@@ -86,7 +103,7 @@ public class DemoApplication{
                     "td, th {border: 1px solid #dddddd;text-align: left;padding: 8px;}" +
                     "tr:nth-child(even) {background-color: #dddddd;}</style></head>" +
                     "<body><h2>Resulting table</h2><table style=\"width:100%\">");
-            bw.write("<tr><th>PRI</th><th>Version</th><th>Timestamp</th><th>Hostname</th><th>Application</th><th>PID</th><th>Message ID</th><th>Data</th><th>Message</th></tr>");
+            bw.write("<tr><th>PRI</th><th>VERSION</th><th>ISOTIMESTAMP</th><th>HOSTNAME</th><th>APPLICATION</th><th>PID</th><th>MESSAGEID</th><th>STRUCTURED-DATA</th><th>MSG</th></tr>");
 
             Scanner input = new Scanner(new File(args[0]));
 
