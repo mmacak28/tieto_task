@@ -1,0 +1,9 @@
+<34>1 2003-10-11T22:14:15.003Z mymachine myapplication 1234 ID47 [eventSource app="Application" eventID="1011"] my_application is started
+<33>1 2003-10-12T20:14:15.003Z mymachine_2 myapplication_2 1235 ID48 - my_application is started_2
+<32>1 2003-09-09T19:09:15.003Z mymachine_3 myapplication_3 1236 ID49 [example@0 class="extreme"] my_application is started_3
+<31>1 2003-10-12T18:14:15.043Z mymachine_4 myapplication_4 1237 ID50 [example@0 class="medium"] my_application is started_4
+<30>1 2002-01-10T08:12:36.043Z mymachine_5 myapplication_5 1238 ID51 [example@0 class="low"] my_application is started_5
+<30>1 2003-01-10T08:12:37.043Z mymachine_6 myapplication_6 1239 ID52 [example@0 class="standard"] my_application is started_6
+<30>1 2002-01-15T11:11:11.143Z mymachine_7 myapplication_7 1240 ID53 [example@0 class="high"] my_application is started_7
+<29>1 2003-10-12T22:14:15.003Z mymachine8 myapplication_8 1241 ID54 [exampleSDID@0 iut="3" eventSource="Application" eventID="1011"][examplePriority@0 class="high"] my_application is started_8
+<28>1 2003-10-11T22:14:15.003Z mymachine_9 myapplication_9 - - - BOMmyapplication is started_9
