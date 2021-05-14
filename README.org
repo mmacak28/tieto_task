@@ -1,0 +1,19 @@
+#+TITLE: Java EE WEB application tracking events in log files
+/Java command line application that parses logs in RFC 5425 format, filters them and outputs in the html table./
+
+The main functionality of the application is based on filterring logs which were before parsed from the IETF-syslog format (RFC 5424). Possiblities for filtering based on timestamp are following:
+ - Whole month, e.g. 2021-10
+ - Day of the month, e.g. 2021-10-12
+ - Specific time, e.g. 22:14:15
+ - Time splice (two specific time), e.g. 22:14:15-22:24:15
+Appliaction reads a text formatted log file. Resulting output is formatted as table and saved into a html file. In the table, name of the columns follow IETF-syslog format (HEADER STRUCTURED-DATA MSG) and rows contain data from the log file.
+* How to build it
+  #+BEGIN_SRC sh
+  mvn clean package
+  #+END_SRC
+* What then?
+  #+BEGIN_SRC sh
+  cd ./target
+  java -jar demo-0.0.1-SNAPSHOT.jar log_file "one_of_the_above_timestamps"
+  #+END_SRC
+ Application uses Simple Syslog 5424 library (https://github.com/palindromicity/simple-syslog-5424) for parsing logs in the given format. 
